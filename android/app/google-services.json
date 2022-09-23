@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "798653156330",
+    "project_id": "exgtest001",
+    "storage_bucket": "exgtest001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:798653156330:android:2d83800b448fd887524093",
+        "android_client_info": {
+          "package_name": "com.example.flutterquickorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "798653156330-pi1jgoclft5ua3bst64esrb1j5k6cdd9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtD5WIHu9KEfcS9B8du4OnMAS1LBO7v1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "798653156330-pi1jgoclft5ua3bst64esrb1j5k6cdd9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
