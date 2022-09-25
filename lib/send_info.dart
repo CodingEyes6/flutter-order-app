@@ -25,6 +25,7 @@ class _SendInfoState extends State<SendInfo> {
     setState(() {
       datauploading = true;
     });
+   await _fireStore.collection("data").add({'data':textController.text});
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("uploading start. Wait some seconds.")));
     var urls =
@@ -127,6 +128,7 @@ class _SendInfoState extends State<SendInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Order Page"),
         actions: [
@@ -144,141 +146,160 @@ class _SendInfoState extends State<SendInfo> {
               : Container()
         ],
       ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 100),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      controller: textController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        hintText: 'Type your Order Here',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3, color: Colors.black), //<-- SEE HERE
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 3, color: Colors.black), //<-- SEE HERE
-                        ),
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 100),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 10, right: 10),
+                  child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    controller: textController,
+                    maxLines: 4,
+                    decoration: const InputDecoration(
+                      hintText: 'Type your Order Here',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 3, color: Colors.black), //<-- SEE HERE
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 3, color: Colors.black), //<-- SEE HERE
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          selectFile(context);
-                        },
-                        child: Text('Select Images From Gallery'),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.red),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.red))))),
-                    height: 80,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: ElevatedButton(
-                        onPressed: pickImageFromCamera,
-                        child: Text('Pick Image from camera'),
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.red),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.red))))),
-                    height: 80,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      onPressed: () => uploadFiles(context),
-                      child: Text(
-                        'Submit',
-                      ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        selectFile(context);
+                      },
+                      child: Text('Select Images From Gallery'),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.red),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.red))))),
+                  height: 80,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  child: ElevatedButton(
+                      onPressed: pickImageFromCamera,
+                      child: Text('Pick Image from camera'),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.red),
+                          shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.red))))),
+                  height: 80,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    onPressed: () => uploadFiles(context),
+                    child: Text(
+                      'Submit',
                     ),
                   ),
-                  Divider(),
-                  imageFiles != null
-                      ? Container(
-                          height: 120,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: imageFiles!.map((imageone) {
-                              return InkWell(
-                                onLongPress: () {
-                                  path.add(imageone.path);
-                                  showicon = true;
-                                  setState(() {
-                                    showBorder = true;
-                                  });
-                                },
-                                onTap: () {
-                                  path.removeWhere(
-                                      (element) => element == imageone.path);
-                                  if (path.isEmpty) {
-                                    showicon = false;
-                                  }
-                                  setState(() {});
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  decoration: BoxDecoration(
-                                    border: (showBorder &&
-                                            path.contains(imageone.path))
-                                        ? Border.all(
-                                            color: Colors.blueAccent, width: 4)
-                                        : null,
-                                  ),
-                                  child: Card(
-                                    child: Image.file(
-                                      File(imageone.path),
-                                      fit: BoxFit.cover,
-                                      width: 120,
-                                      height: 120,
+                ),
+                Divider(),
+                imageFiles != null
+                    ? Container(
+                        height: 120,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: imageFiles!.map((imageone) {
+                            return InkWell(
+                              onLongPress: () {
+                                path.add(imageone.path);
+                                showicon = true;
+                                setState(() {
+                                  showBorder = true;
+                                });
+                              },
+                              onTap: () {
+
+                                showDialog(context: context, builder: (context) {
+                                  return Dialog(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(15),
+                                          child: Image.file(File(imageone.path),),
+                                        ),
+                                        const SizedBox(height: 10,),
+                                        Container(
+                                          alignment: Alignment.topRight,
+                                          child: TextButton(onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                          }, child: const Text('OK')),
+                                        ),
+                                      ],
                                     ),
+                                  );
+                                },);
+                                //  path.removeWhere(
+                                //     (element) => element == imageone.path);
+                                // if (path.isEmpty) {
+                                //   showicon = false;
+                                // }
+                                // setState(() {});
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 5),
+                                decoration: BoxDecoration(
+                                  border: (showBorder &&
+                                          path.contains(imageone.path))
+                                      ? Border.all(
+                                          color: Colors.blueAccent, width: 4)
+                                      : null,
+                                ),
+                                child: Card(
+                                  child: Image.file(
+                                    File(imageone.path),
+                                    fit: BoxFit.cover,
+                                    width: 120,
+                                    height: 120,
                                   ),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      )
+                    : Container()
+              ],
             ),
-            Center(
-              child: datauploading
-                  ? CircularProgressIndicator(
-                      color: Colors.orange,
-                    )
-                  : Container(),
-            ),
-          ],
-        ),
+          ),
+          Center(
+            child: datauploading
+                ? CircularProgressIndicator(
+                    color: Colors.black,
+                  )
+                : Container(),
+          ),
+        ],
       ),
     );
   }
