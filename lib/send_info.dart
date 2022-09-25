@@ -137,6 +137,7 @@ class _SendInfoState extends State<SendInfo> {
                         .removeWhere((element) => path.contains(element.path));
                     setState(() {
                       showicon = false;
+                      showBorder = false;
                     });
                   },
                   icon: Icon(Icons.delete))
